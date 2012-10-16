@@ -1,7 +1,6 @@
 require 'pathname'
 
 class Gif
-  include Thor::Actions
   attr_reader :path
 
   def initialize(path)
@@ -26,7 +25,7 @@ class Gif
       w, h = `#{cmd}`.split(',').map(&:to_i)
       cmd = %Q(identify -format '%n' #{path.to_s})
       n = `#{cmd}`.to_i
-      {:width => w, :height => h, :frames => n, :size => path.size}
+      {width: w, height: h, frames: n, size: path.size}
     end
   end
 end
