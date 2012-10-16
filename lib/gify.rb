@@ -10,7 +10,7 @@ class Gify < Thor
   method_option :tumblr, type: :boolean, default: true
   def create(*files)
     opts = "-delay #{options[:delay]} -loop 0"
-    opts += " -resize 500" if options[:tumblr]
+    opts += ' -resize \>500' if options[:tumblr]
     run %Q(convert #{opts} #{files.join(" ")} #{outgif})
     say_status 'created', outgif
     check_tumblr_friendliness(outgif)
