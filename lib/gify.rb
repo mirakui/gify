@@ -2,18 +2,32 @@ require 'thor'
 require_relative 'gif'
 
 class Gify < Thor
+  include Thor::Actions
+
   desc 'create', 'convert'
-  method_option :out, :type => :string, :default => nil
+  method_option :out,    type: :string,  aliases: '-o'
+  method_option :delay,  type: :numeric, default: 10
+  method_option :tumblr, type: :boolean, default: true
   def create(*files)
-    sh %Q(convert #{files.join(" ")} #{outgif})
+    opts = "-delay #{options[:delay]} -loop 0"
+    opts += " -resize 500" if options[:tumblr]
+    run %Q(convert #{opts} #{files.join(" ")} #{outgif})
+    say_status 'created', outgif
+    check_tumblr_friendliness(outgif)
+  end
+
+  desc 'check_tumblr_friendliness', 'check tumblr friendliness'
+  def check_tumblr_friendliness(gif)
+    gif = Gif.new gif
+    say_status 'meta', gif.meta
+    if gif.tumblr_friendly?
+      say_status 'tumblr?', 'good', :green
+    else
+      say_status 'tumblr?', 'bad', :red
+    end
   end
 
   no_tasks do
-    def sh(cmd)
-      say cmd, :blue
-      system cmd
-    end
-
     def random_name
       chr = ('a'..'z').to_a
       name = ''
