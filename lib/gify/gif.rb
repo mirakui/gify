@@ -13,7 +13,7 @@ module Gify
     end
 
     def tumblr_friendly?
-      size <= 1024 ** 2 && width <= 500
+      size <= 1024 ** 2 && width <= 500 && height <= 700
     end
 
     %w(size width height frames).each do |name|

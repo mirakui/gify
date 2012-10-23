@@ -1,4 +1,5 @@
 require 'thor'
+require_relative '../gify'
 require_relative 'gif'
 require_relative 'command'
 
@@ -17,7 +18,7 @@ module Gify
       cmd = Command::Convert.new
       cmd << "-delay #{options[:delay]}"
       cmd << '-loop 0'
-      cmd << '-resize \>500' if options[:tumblr]
+      cmd << '-resize \>500x700' if options[:tumblr]
       cmd << files << outgif
       cmd.run
       say_status 'created', outgif
@@ -52,7 +53,9 @@ module Gify
       end
 
       def self.start_gify
-        dispatch nil, ARGV.dup, nil, shell: Thor::Base.shell.new
+        dispatch(nil, ARGV.dup, nil, shell: Thor::Base.shell.new) do |instance|
+          Gify.thor = instance
+        end
       end
     end
   end

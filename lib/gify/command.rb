@@ -1,4 +1,5 @@
 require 'open3'
+require_relative '../gify'
 
 module Gify
   module Command
@@ -23,12 +24,12 @@ module Gify
       end
 
       def run
-        say_status 'run', to_s
+        Gify.say_status 'run', to_s
         out, status = ::Open3.capture2e to_s
         if status != 0
           raise CommandError, "#{@command} exit(#{status}): #{out.chomp}"
         end
-        say_status 'result', out
+        Gify.say_status 'result', out.inspect
         out
       end
 
@@ -38,19 +39,6 @@ module Gify
 
       def self.with_options(*options)
         new nil, *options
-      end
-
-      private
-      def say_status(status, message, log_status=true)
-        if thor_shell
-          thor_shell.say_status status, message, log_status
-        end
-      end
-
-      def thor_shell
-        @thor_shell ||= begin
-          defined?(Thor::Base) ? Thor::Base.shell.new : nil
-        end
       end
     end
 

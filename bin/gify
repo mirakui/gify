@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 require 'pathname'
-require_relative '../lib/gify'
+require_relative '../lib/gify/thor_task'
 
 Gify::ThorTask.start_gify
