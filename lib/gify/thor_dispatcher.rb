@@ -1,9 +1,11 @@
 require 'thor'
-require_relative 'thor_task'
 
 module Gify
   module ThorStarter
+    module_function
     def start
+      ThorTask
     end
   end
 end
+
