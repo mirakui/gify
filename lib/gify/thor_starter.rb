@@ -1,5 +1,6 @@
 require 'thor'
 require_relative 'gif'
+require_relative 'command'
 
 module Gify
   class ThorStarter < Thor
@@ -10,9 +11,13 @@ module Gify
     method_option :delay,  type: :numeric, default: 10
     method_option :tumblr, type: :boolean, default: true
     def create(*files)
-      opts = "-delay #{options[:delay]} -loop 0"
-      opts += ' -resize \>500' if options[:tumblr]
-      run %Q(convert #{opts} #{files.join(" ")} #{outgif})
+      cmd = Command::Convert.new
+      cmd << "-delay #{options[:delay]}"
+      cmd << '-loop 0'
+      cmd << '-resize \>500' if options[:tumblr]
+      cmd << files << outgif
+      say cmd.to_s
+      cmd.run
       say_status 'created', outgif
       check_tumblr_friendliness(outgif)
     end
