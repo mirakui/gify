@@ -29,5 +29,15 @@ module Gify
         {width: w, height: h, frames: n, size: path.size}
       end
     end
+
+    def self.create(infiles, outfile, options)
+      cmd = Command::Convert.new
+      outgif = Gif.new outfile
+      cmd << "-delay #{options[:delay]}" << '-loop 0'
+      cmd << '-resize \>500x700' if options[:tumblr]
+      cmd << infiles << outgif
+      cmd.run
+      outgif
+    end
   end
 end

@@ -14,15 +14,10 @@ module Gify
     #method_option :outdir, type: :string,  default: './'
     method_option :delay,  type: :numeric, default: 10
     method_option :tumblr, type: :boolean, default: true
-    def create(*files)
-      cmd = Command::Convert.new
-      cmd << "-delay #{options[:delay]}"
-      cmd << '-loop 0'
-      cmd << '-resize \>500x700' if options[:tumblr]
-      cmd << files << outgif
-      cmd.run
-      say_status 'created', outgif
-      check_tumblr_friendliness(outgif)
+    def create(*infiles)
+      gif = Gif.create infiles, outfile, options
+      check_tumblr_friendliness(gif)
+      say_status 'created', gif
     end
 
     desc 'check_tumblr_friendliness', 'check tumblr friendliness'
@@ -37,18 +32,19 @@ module Gify
     end
 
     no_tasks do
-      def random_name
+      def random_name(prefix=nil)
+        prefix ||= 'gify'
         chr = ('a'..'z').to_a
         name = ''
         5.times { name += chr.sample }
-        "gify-#{name}.gif"
+        "#{prefix}-#{name}.gif"
       end
 
-      def outgif
-        @outgif ||= begin
+      def outfile
+        @outfile ||= begin
           out = options[:out] || random_name
           out += '.gif' unless out =~ /\.gif$/
-          Gif.new out
+          Pathname(out)
         end
       end
 
