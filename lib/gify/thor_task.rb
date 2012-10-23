@@ -6,7 +6,7 @@ module Gify
   class ThorTask < Thor
     include Thor::Actions
 
-    class_option :verbose  type: :boolean, aliases: '-v', default: false
+    class_option :verbose, type: :boolean, aliases: '-v', default: false
 
     desc 'create', 'convert'
     method_option :out,    type: :string,  aliases: '-o'
@@ -49,6 +49,10 @@ module Gify
           out += '.gif' unless out =~ /\.gif$/
           Gif.new out
         end
+      end
+
+      def self.start_gify
+        dispatch nil, ARGV.dup, nil, shell: Thor::Base.shell.new
       end
     end
   end
