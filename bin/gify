@@ -2,4 +2,4 @@
 require 'pathname'
 require_relative '../lib/gify'
 
-Gify.start
+Gify::ThorStarter.start
