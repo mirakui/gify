@@ -27,7 +27,8 @@ module Gify
         Gify.say_status 'run', to_s
         out, status = ::Open3.capture2e to_s
         if status != 0
-          raise CommandError, "#{@command} exit(#{status}): #{out.chomp}"
+          Gify.say_status 'error', out.inspect, :red
+          raise CommandError, "#{@command} exit(#{status})"
         end
         Gify.say_status 'result', out.inspect
         out
