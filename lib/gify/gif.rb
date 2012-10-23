@@ -1,9 +1,8 @@
+require_relative 'tumblr/validator'
 require 'pathname'
 
 module Gify
   class Gif
-    attr_reader :path
-
     def initialize(path)
       @path = Pathname(path.to_s)
     end
@@ -22,11 +21,11 @@ module Gify
 
     def meta
       @meta ||= begin
-        cmd = Command::Identify.with_options "-format '%w,%h'", "#{path}[0]"
+        cmd = Command::Identify.with_options "-format '%w,%h'", "#{@path}[0]"
         w, h = cmd.run.split(',').map(&:to_i)
-        cmd = Command::Identify.with_options "-format '%n'", path
+        cmd = Command::Identify.with_options "-format '%n'", @path
         n = cmd.run.to_i
-        {width: w, height: h, frames: n, size: path.size}
+        {width: w, height: h, frames: n, size: @path.size}
       end
     end
 
