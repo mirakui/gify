@@ -12,7 +12,13 @@ module Gify
     end
 
     def tumblr_friendly?
-      size <= 1024 ** 2 && width <= 500 && height <= 700
+      validator = Gify::Tumblr::Validator.new self
+      if validator.valid?
+        true
+      else
+        validator.errors.each {|e| Gify.say_status 'bad for tumblr', e.message, :red }
+        false
+      end
     end
 
     %w(size width height frames).each do |name|
