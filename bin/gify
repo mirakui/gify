@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
-require_relative '../lib/gify/thor_task'
+require 'bundler/setup'
+Bundler.require
 
-Gify::ThorTask.start_gify
+require_relative '../lib/gify/cli'
+Gify::CLI.start

@@ -1,10 +1,16 @@
+GIT
+  remote: https://github.com/mirakui/thor.git
+  revision: 083e53e34699da594e3840ffb9a67c9aa6caa2c2
+  ref: 083e53e34699da594e3840ffb9a67c9aa6caa2c2
+  specs:
+    thor (0.16.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    thor (0.16.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  thor (>= 0.16.0)
+  thor!
